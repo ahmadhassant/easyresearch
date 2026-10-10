@@ -1,0 +1,59 @@
+name: tests
+
+# Tests the EasyResearch cores on Linux and Windows, and builds and tests the
+# desktop application on Windows.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  cores:
+    name: EasyResearch cores (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install (CPU-only PyTorch)
+        run: |
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e ".[test]"
+      - name: Command works
+        run: easyresearch models forecast
+      - name: Tests
+        run: python -m pytest -q tests
+
+  desktop:
+    name: Desktop application (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: desktop/global.json
+      - name: Install the pinned analysis packages
+        shell: powershell
+        run: |
+          python -m pip install -r desktop/requirements.lock.txt
+          python -m pip install --no-deps -e .
+      - name: Build and test
+        shell: powershell
+        run: ./desktop/build.ps1
+      - name: Keep the integration results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-test-results
+          path: desktop/test-results/*.json
+          if-no-files-found: ignore

@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+pytest-cache-files-*/
+
+# Analysis output (each run writes a new folder here)
+Results/
+/Results/
+
+# Benchmark working files (the summary tables and figures are kept)
+benchmarks/results/*/cache/
+
+# Desktop application: build output, portable release, test runs
+desktop/**/bin/
+desktop/**/obj/
+desktop/release/
+desktop/test-results/
+python-path.txt
+plot-cache/
+
+# LaTeX leftovers
+*.aux
+*.log
+*.out
+*.toc
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+report_latex_errors.log
+
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+.vs/

@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering\small
+\caption{Regression: $R^2$ ($\times 100$) estimated on the first half and measured on the untouched second half (mean of 10 random splits). The truth is that of \ER's selected model; the common-practice estimate is compared with its own winner's truth when its bias is computed.}
+\label{tab:regression}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Dataset & Rows & Common practice & Comparison best & \ER{} final & Truth \\
+\midrule
+Diabetes progression & 221 & 49.4 & 49.2 & 45.9 & 46.6 \\
+Occupational prestige (Canada) & 51 & 81.9 & 81.5 & 76.8 & 73.6 \\
+New York air quality (ozone) & 58 & 63.9 & 64.9 & 60.4 & 59.5 \\
+Friedman \#1 (synthetic, noise sd 1) & 250 & 81.0 & 81.2 & 81.0 & 82.4 \\
+Professors' salaries (US) & 196 & 43.0 & 43.6 & 41.0 & 39.8 \\
+Car highway mileage (mpg) & 109 & 87.0 & 86.4 & 84.0 & 83.5 \\
+Interlocking directorates (Canada) & 124 & 53.4 & 54.9 & 46.7 & 56.4 \\
+Computer performance (cpus) & 104 & 86.6 & 87.6 & 80.7 & 83.5 \\
+Survey of labour and income (wages) & 2055 & 34.5 & 33.6 & 35.1 & 35.2 \\
+\midrule
+Random target (control) & 150 & $-$6.1 & $-$4.3 & $-$8.9 & $-$15.7 \\
+\bottomrule
+\end{tabular}}
+\end{table}

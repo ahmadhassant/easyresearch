@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering\small
+\caption{Signal classification: balanced accuracy (\%) estimated on the first half and measured on the untouched second half (mean of 3 random stratified splits), default model set.}
+\label{tab:signals}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Dataset & Recordings & Comparison best & \ER{} final & Truth \\
+\midrule
+GunPoint (motion) & 100 & 100.0 & 100.0 & 99.7 \\
+ItalyPowerDemand (electricity) & 548 & 97.4 & 97.4 & 97.0 \\
+ArrowHead (shape outlines) & 105 & 93.4 & 93.4 & 95.1 \\
+OSULeaf (leaf outlines, 6 classes) & 221 & 94.0 & 94.0 & 93.0 \\
+\midrule
+Random labels (control) & 100 & 46.9 & 42.7 & 52.9 \\
+\bottomrule
+\end{tabular}
+\end{table}

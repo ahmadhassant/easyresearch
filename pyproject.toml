@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=77.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "easyresearch"
+version = "0.1.0"
+description = "Machine learning without programming: regression, time-series forecasting and signal classification cores, with honest evaluation and plain-language reports."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Ahmad Hassanat", email = "ahmad.hassanat@gmail.com" }]
+keywords = ["machine learning", "regression", "forecasting", "time series", "no-code"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "easyclassifier>=0.8.2,<0.9",
+    "pandas>=1.5",
+    "numpy>=1.23",
+    "scikit-learn>=1.2",
+    "matplotlib>=3.6",
+    "joblib>=1.1",
+    "openpyxl>=3.0.10",
+    "statsmodels>=0.14",
+    "torch>=2.2",
+]
+
+[project.optional-dependencies]
+full = ["xgboost>=2", "lightgbm>=4"]
+test = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/ahmadhassant/easyresearch"
+Issues = "https://github.com/ahmadhassant/easyresearch/issues"
+Changelog = "https://github.com/ahmadhassant/easyresearch/blob/main/CHANGELOG.md"
+
+[project.scripts]
+easyresearch = "easyresearch.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

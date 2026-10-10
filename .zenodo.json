@@ -1,0 +1,32 @@
+{
+  "title": "EasyResearch: Machine Learning without Programming",
+  "upload_type": "software",
+  "description": "Analysis cores for regression, time-series forecasting and signal classification, and a Windows desktop application that runs these tasks and EasyClassifier's classification without code. Every step that learns from data uses training data only, models keep their published defaults with fixed seeds, the selected model receives a separate final score, forecasts are never evaluated on shuffled data, and every run writes a plain-language report with a Methods paragraph and the references for every method used.",
+  "creators": [
+    {
+      "name": "Hassanat, Ahmad B. A."
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "machine learning",
+    "regression",
+    "time-series forecasting",
+    "time-series classification",
+    "no-code",
+    "reproducibility",
+    "Hassanat distance"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/ahmadhassant/easyresearch",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.5281/zenodo.23122901",
+      "relation": "requires",
+      "scheme": "doi"
+    }
+  ]
+}

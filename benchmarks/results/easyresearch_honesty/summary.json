@@ -1,0 +1,103 @@
+{
+  "regression": {
+    "n_data": 9,
+    "runs": 90,
+    "seeds": 10,
+    "bias": {
+      "bias_naive": 2.1797572816208017,
+      "bias_comp": 2.507686184530682,
+      "bias_final": -0.985141535997824
+    },
+    "mae": {
+      "bias_naive": 8.205976040889853,
+      "bias_comp": 7.926878294417419,
+      "bias_final": 9.12961322646733
+    },
+    "p": 0.0001345038621331803,
+    "p_ds": 0.009765625,
+    "ctrl": {
+      "comp": -4.281021984506779,
+      "final": -8.902974168507654,
+      "naive": -6.082925226879608,
+      "truth": -15.721048100444964,
+      "bias_comp": 11.440026115938188,
+      "bias_final": 6.818073931937311
+    },
+    "methods": {
+      "diabetes": "nested",
+      "prestige": "nested",
+      "airquality": "nested",
+      "friedman1": "nested",
+      "salaries": "nested",
+      "mpg": "nested",
+      "ornstein": "nested",
+      "cpus": "nested",
+      "slid": "final_test",
+      "random_target": "nested"
+    }
+  },
+  "screening": {
+    "screen_outside": 0.2730094033742867,
+    "screen_inside": -0.3308739258414095,
+    "external": -0.4392019010664791
+  },
+  "forecasting": {
+    "n_data": 15,
+    "geo": {
+      "shuf": 0.8140218868898014,
+      "comp": 1.0086350811380564,
+      "final": 0.9847464165638552
+    },
+    "median": {
+      "shuf": 0.7509598567922896,
+      "comp": 0.9986495685502066,
+      "final": 0.9564732165238873
+    },
+    "typical": {
+      "shuf": 1.4843677630967032,
+      "comp": 1.2825526117134576,
+      "final": 1.458732768794296
+    },
+    "below_one": {
+      "shuf": 9,
+      "comp": 8,
+      "final": 9
+    },
+    "p": 0.1038818359375,
+    "tool_better": 7,
+    "same": 5,
+    "tool_worse": 3,
+    "truth_gain": 14.14511776091093,
+    "beats_rule": 12,
+    "beats_rule_shuf": 10,
+    "rw_n": 5,
+    "rw_shuf_ml": 5,
+    "rw_shuf_worse": 5,
+    "rw_shuf_gain": 20.18895386245726,
+    "rw_tool_naive": 4,
+    "rw_truth_shuf": 2.6609095915823926,
+    "rw_truth_rule": 2.2930135569853167,
+    "rw_truth_tool": 2.305327620053928
+  },
+  "signals": {
+    "n_data": 4,
+    "runs": 12,
+    "seeds": 3,
+    "bias": {
+      "bias_comp": -0.001954683895025141,
+      "bias_final": -0.017216794047647494
+    },
+    "mae": {
+      "bias_comp": 1.8716836885272512,
+      "bias_final": 1.8261185480716
+    },
+    "p": 0.5,
+    "p_ds": 0.5,
+    "rocket_wins": 12,
+    "ctrl": {
+      "comp": 46.91417378917379,
+      "final": 42.664303289303284,
+      "truth": 52.93996535262192
+    }
+  }
+}
