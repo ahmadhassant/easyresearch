@@ -1,6 +1,24 @@
 # EasyResearch Desktop
 
-A Windows WPF application built around the published EasyClassifier 0.8.2 package and the EasyResearch analysis cores. Four modules work: **Classification** predicts categorical targets with the EasyClassifier package; **Regression** (new in 0.2) predicts a numeric target; **Time-series forecasting** (new in 0.3) forecasts one series measured over time; and **Signal classification** (new in 0.3) classifies single-channel recordings such as ECG beats, EEG epochs or sensor windows. Regression, forecasting and signal classification run the cores of the EasyResearch package (the repository root), the same code its command line runs. All produce reports, figures, predictions and saved models from CSV/Excel data (signal classification also reads UCR archive `.tsv`/`.txt` files). Computer vision (step 4) appears in the sidebar as a roadmap entry and cannot be selected until its module exists.
+A Windows WPF application built around the published EasyClassifier 0.8.2 package and the EasyResearch analysis cores. Four modules work: **Classification** predicts categorical targets with the EasyClassifier package; **Regression** (new in 0.2) predicts a numeric target; **Time-series forecasting** (new in 0.3) forecasts one series measured over time; and **Signal classification** (new in 0.3) classifies single-channel recordings such as ECG beats, EEG epochs or sensor windows. Regression, forecasting and signal classification run the cores of the EasyResearch package (the repository root), the same code its command line runs. All produce reports, figures, predictions and saved models from CSV/Excel data (signal classification also reads UCR archive `.tsv`/`.txt` files).
+
+## Install
+
+Download `EasyResearchDesktop-<version>-setup.exe` from the
+[Releases page](https://github.com/ahmadhassant/easyresearch/releases) and run it.
+It installs for the current user (in `%LOCALAPPDATA%\Programs`, no administrator
+rights needed; the first page offers an installation for all users instead),
+adds EasyResearch Desktop to the Start menu, optionally to the desktop, and can be
+removed from Settings > Apps. Results are saved in `Documents\EasyResearch Results`
+and are kept when the application is removed. Windows may show "Windows protected
+your PC" because the setup program is not code-signed: choose **More info**, then
+**Run anyway**.
+
+The setup program is made from the portable folder (below) with
+`installer/EasyResearchDesktop.iss` (Inno Setup 6.3 or later). The GitHub workflow
+`desktop-release.yml` builds it, installs it silently, checks the installed
+application with `verify_portable.ps1`, uninstalls it, and attaches it to each
+GitHub release; run the workflow by hand to get a test copy before a release.
 
 ## Run the portable application
 
@@ -48,7 +66,7 @@ Classifies recordings with the signal core (`easyresearch.timeseries`). One row 
 
 ## Interface
 
-The sidebar lists the installed modules and the roadmap steps. Switching module keeps your spreadsheet and re-reads it for the new task. Labels, the column check, the result tiles, the comparison table and the evaluation options come from each module's `describe()` result, so a new module needs no interface changes when its result fits the tabular contract. Results show the module's headline measures, a plain-language summary, the comparison table (with the reference row for regression), and a gallery of figures that open full size on click. Tables use neutral column ids with the real names as headers, so column names containing dots, brackets or slashes display correctly.
+The sidebar lists the analysis tasks. Switching module keeps your spreadsheet and re-reads it for the new task. Labels, the column check, the result tiles, the comparison table and the evaluation options come from each module's `describe()` result, so a new module needs no interface changes when its result fits the tabular contract. Results show the module's headline measures, a plain-language summary, the comparison table (with the reference row for regression), and a gallery of figures that open full size on click. Tables use neutral column ids with the real names as headers, so column names containing dots, brackets or slashes display correctly.
 
 ## Open in Visual Studio
 

@@ -1,0 +1,90 @@
+name: desktop release
+
+# Builds the Windows setup program of EasyResearch Desktop, installs it
+# silently, checks the installed application and uninstalls it again.
+#
+# * Run it by hand (Actions > desktop release > Run workflow) to get the
+#   setup program as a downloadable artifact, to test before a release.
+# * When a GitHub release is published (e.g. tag v0.1.0), the setup program
+#   is attached to that release.
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  installer:
+    name: Windows setup program
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: desktop/global.json
+
+      - name: Version matches the release tag
+        shell: powershell
+        run: |
+          $version = (Select-Xml -Path desktop/src/EasyResearch.Desktop/EasyResearch.Desktop.csproj -XPath '//Version').Node.InnerText
+          "EASYRESEARCH_DESKTOP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          if ('${{ github.event_name }}' -eq 'release' -and '${{ github.event.release.tag_name }}' -ne "v$version") {
+            throw "The release tag ${{ github.event.release.tag_name }} does not match the desktop version $version."
+          }
+          Write-Host "EasyResearch Desktop $version"
+
+      - name: Build and test the application
+        shell: powershell
+        run: |
+          python -m pip install -r desktop/requirements.lock.txt
+          python -m pip install --no-deps -e .
+          ./desktop/build.ps1
+
+      - name: Make the portable folder
+        shell: powershell
+        run: ./desktop/publish.ps1
+
+      - name: Make the setup program
+        shell: powershell
+        run: |
+          choco install innosetup --no-progress -y
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DAppVersion=$env:EASYRESEARCH_DESKTOP_VERSION" desktop/installer/EasyResearchDesktop.iss
+          if ($LASTEXITCODE -ne 0) { throw 'The setup program could not be made.' }
+          Get-ChildItem desktop/release/*-setup.exe | Format-Table Name, Length
+
+      - name: Install, check and uninstall
+        shell: powershell
+        run: |
+          $setup = (Get-ChildItem desktop/release/EasyResearchDesktop-*-setup.exe).FullName
+          $arabic = -join ([char[]](0x0628, 0x064A, 0x0627, 0x0646, 0x0627, 0x062A))
+          $dir = Join-Path $env:LOCALAPPDATA "Programs\EasyResearch Desktop $arabic"
+          $p = Start-Process -FilePath $setup -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/CURRENTUSER', "/DIR=`"$dir`"", "/LOG=`"$env:RUNNER_TEMP\install.log`"") -PassThru -Wait
+          if ($p.ExitCode -ne 0) { Get-Content "$env:RUNNER_TEMP\install.log"; throw "Setup failed with exit code $($p.ExitCode)." }
+          ./desktop/verify_portable.ps1 -AppFolder $dir -SkipUi
+          if ($LASTEXITCODE -ne 0) { throw 'The installed application failed its checks.' }
+          $p = Start-Process -FilePath (Join-Path $dir 'unins000.exe') -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES') -PassThru -Wait
+          # The uninstaller hands over to a copy of itself and returns at once, so wait for it.
+          for ($i = 0; $i -lt 60 -and (Test-Path -LiteralPath (Join-Path $dir 'EasyResearchDesktop.exe')); $i++) { Start-Sleep -Seconds 2 }
+          if (Test-Path -LiteralPath (Join-Path $dir 'EasyResearchDesktop.exe')) { throw 'Uninstalling left the application behind.' }
+          Write-Host 'Installed, checked and uninstalled.'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EasyResearchDesktop-setup
+          path: desktop/release/EasyResearchDesktop-*-setup.exe
+          compression-level: 0
+
+      - name: Attach to the release
+        if: github.event_name == 'release'
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $setup = (Get-ChildItem desktop/release/EasyResearchDesktop-*-setup.exe).FullName
+          gh release upload "${{ github.event.release.tag_name }}" "$setup" --clobber

@@ -1,6 +1,6 @@
 # EasyResearch release plan
 
-## Release 1 (EasyResearch Desktop 0.3, EasyResearch 0.1.0, EasyClassifier 0.8.2)
+## Release 1 (EasyResearch 0.1.0 with EasyResearch Desktop 0.1.0, EasyClassifier 0.8.2)
 
 **Goal:** a new user installs the desktop application, runs the example of
 every supported task, and gets a reproducible report without writing code.

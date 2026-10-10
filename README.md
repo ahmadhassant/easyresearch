@@ -38,6 +38,15 @@ This repository holds:
 
 ## Install and run
 
+**Windows, without Python:** download `EasyResearchDesktop-0.1.0-setup.exe`
+from the [Releases page](https://github.com/ahmadhassant/easyresearch/releases)
+and run it. It installs EasyResearch Desktop with its own Python and every
+package it needs; no administrator rights are required. Windows may show
+"Windows protected your PC" because the program is not code-signed: choose
+**More info**, then **Run anyway**.
+
+**Python (any system):**
+
 ```bash
 pip install easyresearch    # installs EasyClassifier, PyTorch and statsmodels
 easyresearch forecast --demo

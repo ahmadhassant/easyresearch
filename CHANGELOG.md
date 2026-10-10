@@ -2,7 +2,7 @@
 
 ## 0.1.0 – 2026-10-11
 
-First version: the regression, forecasting and signal classification cores used by EasyResearch Desktop 0.3 and the `easyresearch` command line.
+First version: the regression, forecasting and signal classification cores used by EasyResearch Desktop 0.1.0 and the `easyresearch` command line.
 
 * Regression: nine models with the Hassanat KNN, R², RMSE, MAE, median absolute error, MAPE and MHSP, honest final score (nested cross-validation up to 2,000 rows, otherwise an untouched 20% test set).
 * Forecasting: reference rules, statistical, machine-learning and deep models; rolling-origin comparison and a final period that plays no part in choosing the model; MASE, MAE, RMSE, sMAPE and MHSP; an automatic horizon that always fits the series.
@@ -14,6 +14,7 @@ First version: the regression, forecasting and signal classification cores used 
 * Every method used is cited in each report and in `citations.txt`: every regression, forecasting and signal model (including XGBoost and LightGBM), the multi-step forecasting strategy, rolling-origin evaluation, nested cross-validation or the final test, the measures (MASE, sMAPE, MHSP, balanced accuracy, MCC, ROC AUC), STL and the software (scikit-learn, statsmodels, PyTorch, NumPy, pandas, Matplotlib). The reference list is generated from the citations in the report (`common/references.py`).
 * Regression cites the sign-symmetric reformulation of the Hassanat distance when its signed form is applied. Forecasting reports describe only the settings of the statistical models actually used (before, exponential-smoothing settings were described even when only Theta was selected).
 * Command line: `--figures`, `--figure-theme` and `--figure-format` for every task; `pip install -e ".[full]"` adds XGBoost and LightGBM to regression.
-* Own repository (split from the EasyClassifier repository, together with EasyResearch Desktop 0.3); requires EasyClassifier 0.8.2 or later (0.8.x).
+* Own repository (split from the EasyClassifier repository, together with EasyResearch Desktop, now numbered 0.1.0 like the package); requires EasyClassifier 0.8.2 or later (0.8.x).
+* EasyResearch Desktop is distributed as a Windows setup program (`EasyResearchDesktop-0.1.0-setup.exe`, attached to the GitHub release), built and tested by the `desktop release` workflow.
 * Honesty benchmark (`benchmarks/easyresearch_honesty.py`): reported scores compared with data never touched, for regression, forecasting and signals, with random-target controls.
 * Tests for leakage-free preparation, final-test isolation (scores unchanged when held-out rows are replaced by noise), time order, reproducibility and model saving.

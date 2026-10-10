@@ -1,4 +1,4 @@
-EasyResearch Desktop 0.3 — Windows x64 preview
+EasyResearch Desktop 0.1.0 — Windows x64
 
 Double-click EasyResearchDesktop.exe. Keep the entire folder together:
 the runtime, worker, modules and DLLs are required. Python and .NET are
@@ -31,9 +31,8 @@ The GUI uses EasyClassifier 0.8.2 automatic preprocessing. PDF generation
 requires an installed LaTeX distribution; report.tex, CSV and Excel files
 are available without one. Detailed package messages appear in Activity log.
 
-This preview includes classification, regression, time-series forecasting
-and signal classification (one channel per recording). Computer vision is
-shown as an upcoming step and is not implemented yet.
+This release includes classification, regression, time-series forecasting
+and signal classification (one channel per recording).
 
 Engines: EasyClassifier 0.8.2 and EasyResearch 0.1.0 by Ahmad Hassanat (MIT).
 Other bundled components retain their own licenses. Python: LICENSE.txt

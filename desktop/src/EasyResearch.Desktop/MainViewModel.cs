@@ -61,7 +61,7 @@ public sealed class TickList
 }
 public sealed record TablePreview(string Title, string Hint, DataView View);
 
-/// <summary>An entry in the sidebar: an installed module, or a roadmap step that is not implemented yet.</summary>
+/// <summary>An entry in the sidebar: an installed module, or a task that could not be loaded (shown with its reason).</summary>
 public sealed record WorkspaceItem(string Title, string Subtitle, ModuleDescriptor? Module, string? Reason = null)
 {
     public bool IsAvailable => Module is not null;
@@ -71,14 +71,13 @@ public sealed record FigurePreview(string Title, string Caption, string Path, Im
 
 public sealed class MainViewModel : INotifyPropertyChanged
 {
-    // Roadmap steps shown in the sidebar until their modules are installed. They cannot be selected.
+    // The analysis tasks, in the order the sidebar shows them.
     private static readonly (string Id, string Title, string Subtitle)[] Roadmap =
     [
         ("classification", "Classification", "Predict a category"),
         ("regression", "Regression", "Predict a number"),
         ("forecasting", "Time-series forecasting", "Forecast future values"),
         ("signals", "Signal classification", "Classify ECG, EEG or sensor recordings"),
-        ("vision", "Computer vision", "Step 4 · planned"),
     ];
     private static readonly List<OptionDescriptor> DefaultValidation = [new("auto","Automatic (recommended)"),new("kfold5","5-fold cross-validation"),new("kfold10","10-fold cross-validation"),new("holdout","Single 80/20 validation split")];
     private static readonly List<OptionDescriptor> DefaultSelection = [new("auto","Automatic (recommended)"),new("nested","Nested cross-validation"),new("final_test","Separate 20% final test")];
@@ -148,7 +147,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         get=>selectedWorkspace;
         set
         {
-            // Roadmap entries are shown but cannot be opened.
+            // Tasks that could not be loaded are shown but cannot be opened.
             if(value is null || value.Module is null || ReferenceEquals(value,selectedWorkspace)) { Changed(); return; }
             selectedWorkspace=value;
             Changed();
@@ -318,7 +317,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 var broken=unavailable.FirstOrDefault(m=>m.Id==step.Id);
                 if(module is not null) Workspaces.Add(new(module.Title,step.Subtitle,module));
                 else if(broken is not null) Workspaces.Add(Broken(broken));
-                else if(step.Id=="vision") Workspaces.Add(new(step.Title,step.Subtitle,null,"Planned for a later release."));
             }
             foreach(var module in Modules.Where(m=>Roadmap.All(r=>r.Id!=m.Id))) Workspaces.Add(new(module.Title,module.Description,module));
             foreach(var broken in unavailable.Where(m=>Roadmap.All(r=>r.Id!=m.Id))) Workspaces.Add(Broken(broken));

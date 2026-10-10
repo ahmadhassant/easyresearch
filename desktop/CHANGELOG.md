@@ -1,6 +1,8 @@
 # EasyResearch Desktop changelog
 
-## 0.3.0 – unreleased
+## 0.1.0 – 2026-10-11
+
+First public release, with the same number as the EasyResearch package (this version was called 0.3.0 during the preview). It is distributed as a Windows setup program (EasyResearchDesktop-0.1.0-setup.exe) attached to the GitHub release. The sidebar no longer shows computer vision as a planned step.
 
 Forecasting and signal classification, one shared analysis engine, and guidance for beginners.
 
@@ -23,7 +25,7 @@ Forecasting and signal classification, one shared analysis engine, and guidance 
 * Every report cites every method that was used (each model, the KNN distance, the evaluation design, the measures, the figures that need a source and the software), and `citations.txt` lists exactly the report's references with what each is cited for.
 * XGBoost and LightGBM are in `requirements.lock.txt`, so the portable application bundles them and they can be selected in classification and regression.
 
-## 0.2.0 – 2026-10-08
+## Preview 0.2 – 2026-10-08 (internal, before the public release)
 
 Regression (roadmap step 2) and a module-aware interface.
 
