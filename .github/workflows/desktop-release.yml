@@ -21,11 +21,11 @@ jobs:
     name: Windows setup program
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         with:
           global-json-file: desktop/global.json
 
@@ -74,7 +74,7 @@ jobs:
           if (Test-Path -LiteralPath (Join-Path $dir 'EasyResearchDesktop.exe')) { throw 'Uninstalling left the application behind.' }
           Write-Host 'Installed, checked and uninstalled.'
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: EasyResearchDesktop-setup
           path: desktop/release/EasyResearchDesktop-*-setup.exe
