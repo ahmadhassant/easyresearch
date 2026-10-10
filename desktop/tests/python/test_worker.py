@@ -69,6 +69,16 @@ class WorkerTests(unittest.TestCase):
             self.assertEqual(events[-1]['result']['dataset'],str(data))
             self.assertIn('المبيعات',[c['name'] for c in events[-1]['result']['columns']])
 
+    def test_request_with_byte_order_mark_is_accepted(self):
+        # Windows PowerShell 5.1 starts its input with a UTF-8 byte-order mark
+        # when the console code page is UTF-8 (as on GitHub's Windows runners).
+        payload=dict(protocol_version=1,request_id='bom',action='catalog')
+        process=subprocess.run([sys.executable,str(ROOT/'worker/worker.py'),'--manifest-dir',str(ROOT/'modules')],
+                               input=b'\xef\xbb\xbf'+(json.dumps(payload)+'\n').encode('utf-8'),capture_output=True,timeout=180)
+        events=[json.loads(line) for line in process.stdout.decode('utf-8').splitlines()]
+        self.assertEqual(process.returncode,0,events[-1])
+        self.assertEqual(events[-1]['type'],'completed')
+
     def test_unknown_module_returns_protocol_error(self):
         p,events=request('inspect',module_id='missing',dataset='demo')
         self.assertNotEqual(p.returncode,0)

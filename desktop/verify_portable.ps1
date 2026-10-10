@@ -68,7 +68,14 @@ function Invoke-Worker([hashtable]$Request) {
     $start.WorkingDirectory = Split-Path $worker
     $start.EnvironmentVariables['PYTHONIOENCODING'] = 'utf-8'
     $start.EnvironmentVariables['PYTHONPATH'] = ''
-    $process = [Diagnostics.Process]::Start($start)
+    # Windows PowerShell 5.1 opens the input with the console's input encoding and,
+    # when that is UTF-8, writes a byte-order mark first; the application itself
+    # never does, so the check uses UTF-8 without one, as the application does.
+    $savedInput = [Console]::InputEncoding
+    try {
+        [Console]::InputEncoding = New-Object Text.UTF8Encoding($false)
+        $process = [Diagnostics.Process]::Start($start)
+    } finally { [Console]::InputEncoding = $savedInput }
     $bytes = (New-Object Text.UTF8Encoding($false)).GetBytes(($Request | ConvertTo-Json -Depth 6 -Compress) + "`n")
     $process.StandardInput.BaseStream.Write($bytes, 0, $bytes.Length)
     $process.StandardInput.Close()

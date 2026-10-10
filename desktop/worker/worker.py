@@ -27,7 +27,9 @@ def main():
     request = None
     emitter = Emitter('invalid-request')
     try:
-        line = sys.stdin.readline()
+        # A caller whose input encoding writes a byte-order mark (Windows
+        # PowerShell 5.1 when the console code page is UTF-8) is accepted too.
+        line = sys.stdin.readline().lstrip('\ufeff')
         if len(line) > 1_000_000:
             raise ValueError('The request is too large.')
         request = json.loads(line)
