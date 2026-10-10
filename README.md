@@ -25,8 +25,8 @@ This repository holds:
 | `src/easyresearch`, `tests` | the analysis cores and their tests (`pip install easyresearch`) |
 | `desktop` | **EasyResearch Desktop**, a Windows application that runs classification, regression, forecasting and signal classification without code ([README](https://github.com/ahmadhassant/easyresearch/blob/main/desktop/README.md)) |
 | `benchmarks` | correctness and honesty benchmarks, with all results |
-| `docs` | development guide, release plan, EasyVision design |
-| `papers` | the EasyResearch paper and the EasyVision paper plan |
+| `docs` | development guide, release plan, publishing steps |
+| `papers` | the EasyResearch paper |
 
 | Core | Task | Status |
 |---|---|---|
@@ -34,7 +34,6 @@ This repository holds:
 | `easyresearch.regression` | predict a number from a table | ready |
 | `easyresearch.timeseries` – forecasting | forecast one series | ready |
 | `easyresearch.timeseries` – signals | classify recordings (ECG, EEG, sensors) | ready (one channel) |
-| Computer vision | images | next |
 
 ## Install and run
 

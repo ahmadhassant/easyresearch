@@ -2,7 +2,7 @@
 
 ## 0.1.0 – 2026-10-11
 
-First public release, with the same number as the EasyResearch package (this version was called 0.3.0 during the preview). It is distributed as a Windows setup program (EasyResearchDesktop-0.1.0-setup.exe) attached to the GitHub release. The sidebar no longer shows computer vision as a planned step.
+First public release, with the same number as the EasyResearch package (this version was called 0.3.0 during the preview). It is distributed as a Windows setup program (EasyResearchDesktop-0.1.0-setup.exe) attached to the GitHub release. The sidebar no longer shows computer vision as a planned step: computer vision will be a separate, stand-alone application (EasyVision).
 
 Forecasting and signal classification, one shared analysis engine, and guidance for beginners.
 
