@@ -1,5 +1,9 @@
 # EasyResearch changelog
 
+## Unreleased
+
+* The software citation (in every report, `citations.txt` and `CITATION.cff`) uses the Zenodo DOI for all versions, 10.5281/zenodo.23305077, and the README shows its badge.
+
 ## 0.1.0 – 2026-10-11
 
 First version: the regression, forecasting and signal classification cores used by EasyResearch Desktop 0.1.0 and the `easyresearch` command line.

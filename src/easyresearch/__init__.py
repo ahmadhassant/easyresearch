@@ -19,8 +19,8 @@ __author__ = "Ahmad Hassanat"
 
 CITATION = (
     "Hassanat, A. B. A. (2026). EasyResearch: Machine Learning without "
-    "Programming (Version {version}) [Software]. "
-    "https://github.com/ahmadhassant/easyresearch".format(version=__version__)
+    "Programming (Version {version}) [Software]. Zenodo. "
+    "https://doi.org/10.5281/zenodo.23305077".format(version=__version__)
 )
 EASYCLASSIFIER_CITATION = (
     "Hassanat, A. B. A. (2026). EasyClassifier: Machine Learning without "

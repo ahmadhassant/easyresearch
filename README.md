@@ -2,6 +2,7 @@
 
 [![tests](https://github.com/ahmadhassant/easyresearch/actions/workflows/tests.yml/badge.svg)](https://github.com/ahmadhassant/easyresearch/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/ahmadhassant/easyresearch/blob/main/LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23305077.svg)](https://doi.org/10.5281/zenodo.23305077)
 
 Machine learning without programming: analysis cores for researchers who do
 not code. They follow the rules of
