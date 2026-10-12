@@ -82,7 +82,8 @@ def compile_tex(tex_text: str, out_dir: str,
 
 VERSION_PACKAGES = ("easyresearch", "easyclassifier", "numpy", "pandas",
                     "scikit-learn", "scipy", "matplotlib", "joblib",
-                    "statsmodels", "torch", "openpyxl", "xgboost", "lightgbm")
+                    "statsmodels", "torch", "openpyxl", "xgboost", "xgboost-cpu",
+                    "lightgbm")
 
 
 def software_versions() -> Dict[str, str]:

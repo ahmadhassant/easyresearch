@@ -93,6 +93,15 @@
        <TextBlock Text="{Binding SummaryText}" LineHeight="21" Margin="0,0,0,10"/>
        <TextBlock Text="{Binding ResultNotes}" Style="{StaticResource Hint}"/>
        <StackPanel Orientation="Horizontal" Margin="0,15,0,0"><Button Content="Open results folder" Click="OpenResults_Click"/><Button Content="Open report" Click="OpenReport_Click"/></StackPanel>
+       <Border Visibility="{Binding ReportIsLatexOnly, Converter={StaticResource Visible}}" Background="#FFF8E6" BorderBrush="#F0D9A0" BorderThickness="1" CornerRadius="6" Padding="16" Margin="0,16,0,0">
+        <StackPanel>
+         <TextBlock Text="Your report was saved as LaTeX (report.tex), not as a PDF" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,6"/>
+         <TextBlock TextWrapping="Wrap" LineHeight="20" Text="This computer has no LaTeX program, which is what turns the report into a PDF. Your results, tables, figures and model are complete and saved. To get the PDF report, choose one of these:"/>
+         <TextBlock TextWrapping="Wrap" LineHeight="20" Margin="0,10,0,0"><Run FontWeight="SemiBold" Text="Online, nothing to install (Overleaf). "/><Run Text="Click ‘Prepare for Overleaf’. It saves report_for_overleaf.zip in your results folder. Then click ‘Open Overleaf’, sign in (a free account is enough), choose New project → Upload project and select that zip file. The PDF appears on the right; use the download button above it to save it."/></TextBlock>
+         <TextBlock TextWrapping="Wrap" LineHeight="20" Margin="0,8,0,0"><Run FontWeight="SemiBold" Text="On this computer (MiKTeX). "/><Run Text="Click ‘Get MiKTeX’ and install it (free). During setup, set ‘Install missing packages on-the-fly’ to ‘Yes’. Then close and reopen EasyResearch Desktop and run the analysis again: report.pdf is made automatically from then on."/></TextBlock>
+         <StackPanel Orientation="Horizontal" Margin="0,12,0,0"><Button Content="Prepare for Overleaf" Click="PrepareOverleaf_Click"/><Button Content="Open Overleaf" Click="OpenOverleaf_Click"/><Button Content="Get MiKTeX" Click="GetMiktex_Click"/></StackPanel>
+        </StackPanel>
+       </Border>
       </StackPanel></Border>
       <ItemsControl ItemsSource="{Binding ResultTables}"><ItemsControl.ItemTemplate><DataTemplate><StackPanel Margin="0,0,0,8"><TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,5"/><TextBlock Text="{Binding Hint}" Style="{StaticResource Hint}" Margin="0,0,0,10"/><DataGrid ItemsSource="{Binding View}" IsReadOnly="True" AutoGenerateColumns="True" AutoGeneratingColumn="Table_AutoGeneratingColumn" MaxHeight="320" MinHeight="80"/></StackPanel></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
       <TextBlock Text="{Binding ComparisonTitle}" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,5"/><TextBlock Text="{Binding ComparisonHint}" Style="{StaticResource Hint}" Margin="0,0,0,10"/>

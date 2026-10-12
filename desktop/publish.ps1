@@ -19,6 +19,37 @@ Expand-Archive -LiteralPath $RuntimeArchive -DestinationPath $runtimeFolder -For
 @('python312.zip', '.', 'Lib/site-packages', 'import site') | Set-Content -LiteralPath (Join-Path $runtimeFolder 'python312._pth') -Encoding ascii
 & $Python -m pip install --only-binary=:all: --target (Join-Path $runtimeFolder 'Lib\site-packages') -r (Join-Path $PSScriptRoot 'requirements.lock.txt')
 if ($LASTEXITCODE -ne 0) { throw 'Bundled analysis dependencies could not be installed.' }
+# PyTorch (forecasting and signal classification) needs the Microsoft Visual
+# C++ runtime: msvcp140.dll and, in recent builds, vcruntime140_threads.dll.
+# The embedded Python ships only vcruntime140.dll and vcruntime140_1.dll, and a
+# clean Windows computer has no runtime installed, so both tasks failed to load.
+# The runtime files are copied next to python.exe (app-local deployment, which
+# the Visual Studio redistribution terms allow), all from one runtime version.
+$crtFiles = @('msvcp140.dll', 'msvcp140_1.dll', 'msvcp140_2.dll', 'msvcp140_atomic_wait.dll',
+              'msvcp140_codecvt_ids.dll', 'vcruntime140.dll', 'vcruntime140_1.dll',
+              'vcruntime140_threads.dll', 'concrt140.dll')
+$crtFolder = $null
+$vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+if (Test-Path -LiteralPath $vswhere) {
+    $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+    if ($vs) {
+        $crtFolder = Get-ChildItem -Path (Join-Path $vs 'VC\Redist\MSVC\*\x64\Microsoft.VC14*.CRT') -Directory -ErrorAction SilentlyContinue |
+            Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'vcruntime140_threads.dll') } |
+            Sort-Object { try { [version]$_.Parent.Parent.Name } catch { [version]'0.0' } } |
+            Select-Object -Last 1 -ExpandProperty FullName
+    }
+}
+if (-not $crtFolder) { $crtFolder = Join-Path $env:SystemRoot 'System32' }
+foreach ($name in $crtFiles) {
+    $source = Join-Path $crtFolder $name
+    if (Test-Path -LiteralPath $source) { Copy-Item -LiteralPath $source -Destination $runtimeFolder -Force }
+}
+foreach ($name in @('msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll', 'vcruntime140_threads.dll')) {
+    if (-not (Test-Path -LiteralPath (Join-Path $runtimeFolder $name))) {
+        throw "The Visual C++ runtime file $name was not found in $crtFolder. Install the latest Visual C++ Redistributable (x64) on the build computer: https://aka.ms/vs/17/release/vc_redist.x64.exe"
+    }
+}
+Write-Host "Visual C++ runtime bundled from $crtFolder"
 # The analysis cores come from the EasyResearch source next to this folder,
 # so the desktop runs exactly the code the command line runs. Their
 # dependencies, including statsmodels and the CPU build of PyTorch used by

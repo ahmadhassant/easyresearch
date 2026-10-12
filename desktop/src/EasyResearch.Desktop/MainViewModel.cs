@@ -131,6 +131,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public bool Idle => !Busy;
     public bool CanRun => !Busy && worker is not null && RunHint.Length==0;
     public bool HasResult => Result is not null;
+    // True when the report could only be saved as LaTeX (report.tex), because no LaTeX program is installed.
+    public bool ReportIsLatexOnly => Result is { } r && !File.Exists(Path.Combine(r.OutputDir,"report.pdf")) && File.Exists(Path.Combine(r.OutputDir,"report.tex"));
     public string Status { get => status; private set { status=value; Changed(); } }
     public string ActivityLog { get => log; private set { log=value; Changed(); } }
     public string Dataset { get => dataset; private set { dataset=value; Changed(); Changed(nameof(DatasetDisplay)); } }
@@ -269,7 +271,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 foreach(var file in value.Artifacts) Artifacts.Add(file);
             }
             Changed(); Changed(nameof(HasResult)); Changed(nameof(ComparisonTable)); Changed(nameof(FinalExplanation)); Changed(nameof(ResultNotes));
-            Changed(nameof(SummaryText)); Changed(nameof(ComparisonTitle)); Changed(nameof(ComparisonHint)); Changed(nameof(HasFigures));
+            Changed(nameof(SummaryText)); Changed(nameof(ComparisonTitle)); Changed(nameof(ComparisonHint)); Changed(nameof(HasFigures)); Changed(nameof(ReportIsLatexOnly));
         }
     }
     private string Noun => resultModule?.Labels.ModelNoun ?? "model";

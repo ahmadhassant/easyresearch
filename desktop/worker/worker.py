@@ -8,6 +8,19 @@ from pathlib import Path
 import sys
 import traceback
 import warnings
+# PyTorch (forecasting, signal classification) needs a recent Microsoft C++
+# runtime. publish.ps1 places one next to python.exe. Load it before any
+# package that carries an older copy (scikit-learn ships its own msvcp140.dll),
+# so every library in this process uses the same, newest runtime.
+if sys.platform == 'win32':
+    import ctypes
+    for _name in ('vcruntime140.dll', 'vcruntime140_1.dll', 'vcruntime140_threads.dll', 'msvcp140.dll'):
+        _path = Path(sys.executable).resolve().parent / _name
+        if _path.exists():
+            try:
+                ctypes.WinDLL(str(_path))
+            except OSError:
+                pass
 
 # The embedded interpreter has an isolated search path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))

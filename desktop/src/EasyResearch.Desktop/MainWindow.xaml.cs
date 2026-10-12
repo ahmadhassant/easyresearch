@@ -1,6 +1,7 @@
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -54,7 +55,35 @@ public partial class MainWindow : Window
     {
         if(viewModel.Result is not { } result) return;
         var pdf=Path.Combine(result.OutputDir,"report.pdf");
-        Open(File.Exists(pdf) ? pdf : Path.Combine(result.OutputDir,"report.tex"));
+        // Without a PDF, show report.tex in its folder: a computer without LaTeX has no program for .tex files.
+        if(File.Exists(pdf)) Open(pdf); else ShowInFolder(Path.Combine(result.OutputDir,"report.tex"));
+    }
+    private void PrepareOverleaf_Click(object sender,RoutedEventArgs e)
+    {
+        if(viewModel.Result is not { } result) return;
+        try
+        {
+            // Overleaf's 'Upload project' takes one zip file: report.tex at the top and the figures it uses in figures/.
+            var zip=Path.Combine(result.OutputDir,"report_for_overleaf.zip");
+            if(File.Exists(zip)) File.Delete(zip);
+            using(var archive=ZipFile.Open(zip,ZipArchiveMode.Create))
+            {
+                archive.CreateEntryFromFile(Path.Combine(result.OutputDir,"report.tex"),"report.tex");
+                var figures=Path.Combine(result.OutputDir,"figures");
+                if(Directory.Exists(figures))
+                    foreach(var file in Directory.EnumerateFiles(figures))
+                        archive.CreateEntryFromFile(file,"figures/"+Path.GetFileName(file));
+            }
+            ShowInFolder(zip);
+        }
+        catch(Exception ex) { MessageBox.Show(this,ex.Message,"Could not prepare the Overleaf file",MessageBoxButton.OK,MessageBoxImage.Information); }
+    }
+    private void OpenOverleaf_Click(object sender,RoutedEventArgs e) => Open("https://www.overleaf.com/project");
+    private void GetMiktex_Click(object sender,RoutedEventArgs e) => Open("https://miktex.org/download");
+    private void ShowInFolder(string path)
+    {
+        try { Process.Start(new ProcessStartInfo("explorer.exe",$"/select,\"{path}\"") { UseShellExecute=true }); }
+        catch(Exception ex) { MessageBox.Show(this,ex.Message,"Could not open folder",MessageBoxButton.OK,MessageBoxImage.Information); }
     }
     private void Artifact_DoubleClick(object sender,MouseButtonEventArgs e)
     {
