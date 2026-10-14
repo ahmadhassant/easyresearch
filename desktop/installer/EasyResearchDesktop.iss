@@ -2,7 +2,7 @@
 ;
 ; Made from the portable folder that publish.ps1 creates:
 ;   powershell -ExecutionPolicy Bypass -File desktop\publish.ps1
-;   "%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" /DAppVersion=0.1.0 desktop\installer\EasyResearchDesktop.iss
+;   "%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" /DAppVersion=0.1.1 desktop\installer\EasyResearchDesktop.iss
 ; The result is desktop\release\EasyResearchDesktop-<version>-setup.exe.
 ; The GitHub workflow desktop-release.yml does the same and attaches the
 ; setup program to each GitHub release.
@@ -12,7 +12,7 @@
 ; first page lets the user choose an installation for all users instead.
 
 #ifndef AppVersion
-  #define AppVersion "0.1.0"
+  #define AppVersion "0.1.1"
 #endif
 #ifndef SourceDir
   #define SourceDir "..\release\EasyResearchDesktop"

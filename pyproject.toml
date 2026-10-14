@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "easyresearch"
-version = "0.1.0"
+version = "0.1.1"
 description = "Machine learning without programming: regression, time-series forecasting and signal classification cores, with honest evaluation and plain-language reports."
 readme = "README.md"
 requires-python = ">=3.10"

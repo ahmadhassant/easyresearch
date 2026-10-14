@@ -1,7 +1,10 @@
 # EasyResearch changelog
 
-## Unreleased
+## 0.1.1 – 2026-10-14
 
+Fixes for the Windows setup program of EasyResearch Desktop 0.1.1; the analyses and their results are unchanged.
+
+* `versions.txt` also records the `xgboost-cpu` package, the XGBoost build bundled with the desktop application.
 * The software citation (in every report, `citations.txt` and `CITATION.cff`) uses the Zenodo DOI for all versions, 10.5281/zenodo.23305077, and the README shows its badge.
 
 ## 0.1.0 – 2026-10-11

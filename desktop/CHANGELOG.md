@@ -1,5 +1,11 @@
 # EasyResearch Desktop changelog
 
+## 0.1.1 – 2026-10-14
+
+* Fixed: on a Windows computer that never had Python or Visual C++ installed, Time-series forecasting and Signal classification showed "Not available". PyTorch needs the Microsoft Visual C++ runtime (msvcp140.dll and vcruntime140_threads.dll), which neither PyTorch nor the bundled Python includes. The runtime is now installed next to the bundled Python, and the build stops if it cannot be found. Checked with `verify_portable.ps1` on a clean computer, offline, from a folder whose name has spaces and Arabic letters: all four tasks load and run.
+* When no LaTeX program is installed, the Results tab explains that the report was saved as `report.tex` and how to get the PDF: **Prepare for Overleaf** (a zip ready for Overleaf's Upload project), **Open Overleaf** or **Get MiKTeX**. **Open report** now shows `report.tex` in its folder instead of trying to open a file type the computer has no program for.
+* Uses EasyResearch 0.1.1.
+
 ## 0.1.0 – 2026-10-11
 
 First public release, with the same number as the EasyResearch package (this version was called 0.3.0 during the preview). It is distributed as a Windows setup program (EasyResearchDesktop-0.1.0-setup.exe) attached to the GitHub release. The sidebar no longer shows computer vision as a planned step: computer vision will be a separate, stand-alone application (EasyVision).

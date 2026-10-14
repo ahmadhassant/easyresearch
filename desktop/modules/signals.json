@@ -6,5 +6,5 @@
   "input_kind": "tabular",
   "adapter": "adapters.signals:SignalsModule",
   "package": "easyresearch",
-  "package_version": "0.1.0"
+  "package_version": "0.1.1"
 }
