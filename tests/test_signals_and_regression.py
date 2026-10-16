@@ -62,6 +62,37 @@ def test_signal_run_nested_without_deep(tmp_path):
     assert r["reference"].selection_score == pytest.approx(1 / 3)
 
 
+def test_rocket_accepts_the_shortest_recordings():
+    # 10 values is the accepted minimum; ROCKET kernels are up to 11 long.
+    rng = np.random.default_rng(1)
+    X = rng.normal(size=(40, sd.MIN_LENGTH))
+    y = np.repeat([0, 1], 20)
+    X[y == 1] += np.linspace(0, 2, sd.MIN_LENGTH)
+    p = Rocket(n_kernels=500).fit(X, y).predict_proba(X)
+    assert p.shape == (40, 2) and np.isfinite(p).all()
+
+
+@pytest.mark.parametrize("models", [["knn"], ["rocket"]])
+def test_single_model_holdout_exports_validation_rows(tmp_path, models):
+    from sklearn.metrics import balanced_accuracy_score
+    df = sd.load_demo().head(90)
+    r = run_signal_classification(
+        df, "label", SignalSettings(models=models, validation="holdout",
+                                    figures=False),
+        str(tmp_path), "demo", "demo", progress=lambda m: None)
+    assert r["method"] == "holdout"
+    pred = pd.read_csv(f"{r['out']}/predictions.csv")
+    assert len(pred) == r["test_rows"] == 18            # the 20% split
+    assert pred.row_in_file.is_unique
+    # The spreadsheet rows named in the file (header = row 1) really hold
+    # the labels shown as "actual".
+    truth = df["label"].astype(str).to_numpy()
+    assert (truth[pred.row_in_file.to_numpy() - 2] ==
+            pred.actual.astype(str).to_numpy()).all()
+    assert balanced_accuracy_score(pred.actual, pred.predicted) == \
+        pytest.approx(r["shown"].selection_score)
+
+
 def test_signal_run_with_deep_uses_final_test(tmp_path):
     r = run_signal_classification(
         sd.load_demo().head(120), "label",

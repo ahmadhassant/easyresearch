@@ -1,5 +1,12 @@
 # EasyResearch Desktop changelog
 
+## Unreleased
+
+* Fixed (Signal classification): one model with **Single 80/20 validation split** crashed while saving the results.
+* Fixed (Time-series forecasting): files with repeated dates could be refused as "not evenly spaced".
+* Fixed (Signal classification): ROCKET failed on recordings of 10 values, although 10 values are accepted.
+* `publish.ps1` starts from an empty output folder and checks that every bundled package matches `requirements.lock.txt`. Before, a second local build kept the packages of the first one; the setup program built by GitHub was not affected.
+
 ## 0.1.1 – 2026-10-14
 
 * Fixed: on a Windows computer that never had Python or Visual C++ installed, Time-series forecasting and Signal classification showed "Not available". PyTorch needs the Microsoft Visual C++ runtime (msvcp140.dll and vcruntime140_threads.dll), which neither PyTorch nor the bundled Python includes. The runtime is now installed next to the bundled Python, and the build stops if it cannot be found. Checked with `verify_portable.ps1` on a clean computer, offline, from a folder whose name has spaces and Arabic letters: all four tasks load and run.

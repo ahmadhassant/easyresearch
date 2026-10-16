@@ -123,6 +123,10 @@ class Rocket(BaseEstimator, ClassifierMixin):
             max_exp = np.log2(max(1, (L - 1) / (length - 1)))
             dil = int(2 ** rng.uniform(0, max_exp))
             pad = ((length - 1) * dil) // 2 if rng.integers(2) else 0
+            if (length - 1) * dil + 1 > L:
+                # A kernel longer than a short recording (e.g. 11 values on
+                # a 10-value recording) is padded so it still fits.
+                pad = ((length - 1) * dil) // 2
             groups.setdefault((length, dil, pad), []).append((w, b))
         self.groups_ = [(k, torch.tensor(np.stack([w for w, _ in v])[:, None],
                                          dtype=torch.float32),

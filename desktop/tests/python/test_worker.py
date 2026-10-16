@@ -444,6 +444,26 @@ class SignalsTests(unittest.TestCase):
                              settings={'models':['knn'],'first':'t1','last':'t5'})
             self.assertIn('at least 10',events[-1]['message'])
 
+    def test_single_model_holdout_on_shortest_recordings(self):
+        # One model with a single 80/20 split used to crash while saving the
+        # predictions, and ROCKET failed on recordings of only 10 values.
+        import pandas as pd
+        from sklearn.metrics import balanced_accuracy_score
+        with tempfile.TemporaryDirectory() as folder:
+            data=Path(folder)/'short.tsv'
+            write_ucr(data,length=10)
+            for model in ('knn','rocket'):
+                with self.subTest(model=model):
+                    p,events=request('run',module_id='signals',dataset=str(data),target='label',output_root=folder,
+                                     settings={'models':[model],'validation':'holdout','figures':False})
+                    self.assertEqual(p.returncode,0,events[-1])
+                    result=events[-1]['result']
+                    self.assertEqual((result['evaluation_method'],result['test_rows']),('holdout',12))
+                    pred=pd.read_csv(Path(result['output_dir'])/'predictions.csv')
+                    self.assertEqual(len(pred),12)
+                    self.assertAlmostEqual(balanced_accuracy_score(pred.actual.astype(str),pred.predicted.astype(str)),
+                                           result['final']['metrics']['balanced_accuracy'])
+
     def test_unsuitable_label_and_models_are_refused(self):
         with tempfile.TemporaryDirectory() as folder:
             data=Path(folder)/'waves.tsv'

@@ -22,6 +22,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
+from sklearn.model_selection import train_test_split  # noqa: E402
 from easyclassifier import preprocessing as pp  # noqa: E402
 from easyclassifier import recommend as rec  # noqa: E402
 from easyclassifier import reporting as rep  # noqa: E402
@@ -225,8 +226,8 @@ def run_signal_classification(df: pd.DataFrame, label: str,
         ] + table
     rep.save_summary_csv(table, os.path.join(out, "summary.csv"))
     rep.save_excel(table, os.path.join(out, "results.xlsx"))
-    rows = (recs.file_rows[test] if method == "final_test"
-            else recs.file_rows)
+    rows = _shown_rows(recs.file_rows, method, final, dev, test, yc,
+                       validation, len(shown.y_true))
     pd.DataFrame({"row_in_file": rows,
                   "actual": [class_names[int(v)] for v in shown.y_true],
                   "predicted": [class_names[int(v)] for v in shown.y_pred]}
@@ -297,6 +298,34 @@ def run_signal_classification(df: pd.DataFrame, label: str,
                 dev_rows=len(dev) if dev is not None else None,
                 test_rows=len(test) if test is not None
                 else len(shown.y_true), figures=fig_files)
+
+
+def _shown_rows(file_rows, method, final, dev, test, yc, validation,
+                n_shown) -> np.ndarray:
+    """File rows of the recordings behind the shown (final) predictions.
+
+    * final score on the untouched test set: the test rows;
+    * nested cross-validation, or cross-validation of one model: every
+      recording of the comparison data;
+    * single 80/20 split of one model: the 20% validation rows, found with
+      the same stratified split (seed 42) as EasyClassifier's ``evaluate``.
+    """
+    if final is not None and method == "final_test":
+        rows = file_rows[test]
+    else:
+        base = file_rows[dev] if dev is not None and final is None \
+            else file_rows
+        if final is None and validation == "holdout":
+            strat = yc if len(np.unique(yc)) > 1 else None
+            _, te = train_test_split(np.arange(len(yc)), test_size=0.2,
+                                     random_state=42, stratify=strat)
+            rows = base[te]
+        else:
+            rows = base
+    if len(rows) != n_shown:
+        raise RuntimeError(f"Internal error: {n_shown} predictions but "
+                           f"{len(rows)} file rows; please report this.")
+    return rows
 
 
 def _val(m, v):

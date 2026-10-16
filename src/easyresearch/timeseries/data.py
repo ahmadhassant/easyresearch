@@ -105,7 +105,9 @@ def suggest_value(df: pd.DataFrame) -> Optional[str]:
 
 
 def _unit_from_spacing(times: pd.Series) -> Optional[str]:
-    days = times.sort_values().diff().dropna().dt.total_seconds() / 86400
+    # Repeated time points (averaged later) say nothing about the spacing.
+    days = (times.drop_duplicates().sort_values().diff().dropna()
+            .dt.total_seconds() / 86400)
     if days.empty:
         return None
     d = float(days.median())

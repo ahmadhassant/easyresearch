@@ -56,6 +56,21 @@ def test_business_days_and_row_order():
     assert s.unit is None and s.season == 1
 
 
+def test_repeated_dates_are_averaged_not_refused():
+    # Three readings per month: before 0.1.2 the spacing looked like 0 days
+    # and the series was refused as "not evenly spaced".
+    dates = pd.date_range("2000-01-01", periods=40, freq="MS").repeat(3)
+    vals = np.arange(120, dtype=float)
+    s = td.prepare_series(_frame(dates.strftime("%Y-%m-%d"), vals), "Sales")
+    assert s.unit == "M" and len(s.values) == 40
+    assert s.values[0] == 1.0                    # mean of 0, 1, 2
+    assert any("repeated time point" in n for n in s.notes)
+    d = pd.date_range("2020-01-01", periods=60, freq="D")
+    d = d.append(d[[5, 6, 7]]).sort_values()     # a few repeated days
+    assert td.prepare_series(_frame(d, np.random.rand(63)),
+                             "Sales").unit == "D"
+
+
 def test_irregular_dates_and_short_series_refused():
     d = pd.to_datetime(["2020-01-01", "2020-01-04", "2020-03-01"] * 12)
     d = d + pd.to_timedelta(np.arange(36) * 97, unit="D")

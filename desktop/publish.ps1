@@ -6,6 +6,18 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $Destination = [IO.Path]::GetFullPath($Destination)
+# Always start from an empty folder. 'pip install --target' does not replace
+# packages that are already there, so a second local build kept the old
+# dependencies (and old program files) from the first one. A build on GitHub
+# starts from a clean checkout and was not affected.
+if (Test-Path -LiteralPath $Destination) {
+    $existing = @(Get-ChildItem -LiteralPath $Destination -Force)
+    if ($existing.Count -gt 0 -and -not (Test-Path -LiteralPath (Join-Path $Destination 'EasyResearchDesktop.exe'))) {
+        throw "$Destination is not empty and is not an earlier EasyResearch Desktop build. Choose an empty folder with -Destination."
+    }
+    Write-Host "Removing the earlier build in $Destination"
+    Remove-Item -LiteralPath $Destination -Recurse -Force
+}
 New-Item -ItemType Directory -Path $Destination -Force | Out-Null
 & $Dotnet publish (Join-Path $PSScriptRoot 'src\EasyResearch.Desktop\EasyResearch.Desktop.csproj') -c Release -r win-x64 --self-contained true --disable-build-servers -o $Destination
 if ($LASTEXITCODE -ne 0) { throw 'Desktop publishing failed.' }
@@ -55,6 +67,8 @@ Write-Host "Visual C++ runtime bundled from $crtFolder"
 # dependencies, including statsmodels and the CPU build of PyTorch used by
 # forecasting, are pinned in requirements.lock.txt.
 $wheelFolder = Join-Path $PSScriptRoot 'release\wheels'
+# Wheels left from an earlier build must not be picked up instead of the new one.
+if (Test-Path -LiteralPath $wheelFolder) { Remove-Item -LiteralPath $wheelFolder -Recurse -Force }
 New-Item -ItemType Directory -Path $wheelFolder -Force | Out-Null
 # EasyClassifier comes from PyPI at the version pinned in the lock file; EasyResearch is bundled from
 # the source in this repository, so the portable application always matches the code that was tested.
@@ -65,5 +79,23 @@ foreach ($package in @(@{ Name = 'easyresearch'; Source = '..' })) {
     & $Python -m pip install --no-deps --upgrade --force-reinstall --target (Join-Path $runtimeFolder 'Lib\site-packages') $wheel.FullName
     if ($LASTEXITCODE -ne 0) { throw "The $($package.Name) package could not be bundled." }
 }
+# Every bundled package must be exactly the version in requirements.lock.txt,
+# installed once (two .dist-info folders mean an old copy was left behind).
+$sitePackages = Join-Path $runtimeFolder 'Lib\site-packages'
+$installed = @(Get-ChildItem -LiteralPath $sitePackages -Directory -Filter '*.dist-info')
+$problems = @()
+foreach ($line in Get-Content -LiteralPath (Join-Path $PSScriptRoot 'requirements.lock.txt')) {
+    if ($line -notmatch '^\s*([A-Za-z0-9_.\-]+)==([^\s;#]+)') { continue }
+    $name = ($Matches[1] -replace '[-_.]+', '_').ToLowerInvariant()
+    $wanted = $Matches[2]
+    $found = @($installed | Where-Object { ($_.Name -replace '\.dist-info$', '') -match '^(.+)-([^-]+)$' -and
+                                           (($Matches[1] -replace '[-_.]+', '_').ToLowerInvariant() -eq $name) })
+    if ($found.Count -ne 1) { $problems += "$name`: $($found.Count) installed copies" }
+    elseif ($found[0].Name -notmatch ('-' + [regex]::Escape($wanted) + '\.dist-info$')) { $problems += "$name`: $($found[0].Name), expected $wanted" }
+}
+$own = @($installed | Where-Object { $_.Name -like 'easyresearch-*' })
+if ($own.Count -ne 1) { $problems += "easyresearch: $($own.Count) installed copies" }
+if ($problems) { throw "The bundled Python packages do not match requirements.lock.txt:`n" + ($problems -join "`n") }
+Write-Host "Bundled packages match requirements.lock.txt ($($installed.Count) packages)."
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'PORTABLE-README.txt') -Destination $Destination -Force
 Write-Host "Portable application: $Destination\EasyResearchDesktop.exe"
