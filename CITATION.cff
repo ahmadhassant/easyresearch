@@ -6,8 +6,8 @@ authors:
   - family-names: Hassanat
     given-names: Ahmad B. A.
     email: ahmad.hassanat@gmail.com
-version: 0.1.1
-date-released: 2026-10-14
+version: 0.1.2
+date-released: 2026-10-17
 doi: 10.5281/zenodo.23305077
 license: MIT
 repository-code: "https://github.com/ahmadhassant/easyresearch"

@@ -40,7 +40,7 @@
       <TextBlock Text="{Binding Subtitle}" Foreground="#A6C5CC" FontSize="11.5" Margin="0,2,0,0"/>
      </StackPanel></DataTemplate></ListBox.ItemTemplate>
     </ListBox>
-    <StackPanel Grid.Row="3" Margin="6,0,0,0"><TextBlock Text="Research without programming" Foreground="White" FontWeight="SemiBold"/><TextBlock Text="Guided choices. Clear results." Foreground="#A6C5CC" FontSize="12" Margin="0,6,0,0"/><TextBlock Text="EasyResearch 0.1.1 · EasyClassifier 0.8.2" Foreground="#A6C5CC" FontSize="11" Margin="0,20,0,0"/></StackPanel>
+    <StackPanel Grid.Row="3" Margin="6,0,0,0"><TextBlock Text="Research without programming" Foreground="White" FontWeight="SemiBold"/><TextBlock Text="Guided choices. Clear results." Foreground="#A6C5CC" FontSize="12" Margin="0,6,0,0"/><TextBlock Text="EasyResearch 0.1.2 · EasyClassifier 0.8.2" Foreground="#A6C5CC" FontSize="11" Margin="0,20,0,0"/></StackPanel>
    </Grid>
   </Border>
   <Grid Grid.Column="1" Margin="28,24,28,20">

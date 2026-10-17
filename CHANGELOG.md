@@ -1,6 +1,6 @@
 # EasyResearch changelog
 
-## Unreleased
+## 0.1.2 – 2026-10-17
 
 * Signal classification: one model with a single 80/20 validation split no longer crashes while saving `predictions.csv` (the file now lists the 20% validation recordings, with their rows in the data file).
 * Forecasting: a date column in which some dates appear more than once is no longer refused as "not evenly spaced"; the spacing is read from the distinct dates, and repeated time points are averaged as before (with a note).

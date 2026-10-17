@@ -1,11 +1,12 @@
 # EasyResearch Desktop changelog
 
-## Unreleased
+## 0.1.2 – 2026-10-17
 
 * Fixed (Signal classification): one model with **Single 80/20 validation split** crashed while saving the results.
 * Fixed (Time-series forecasting): files with repeated dates could be refused as "not evenly spaced".
 * Fixed (Signal classification): ROCKET failed on recordings of 10 values, although 10 values are accepted.
 * `publish.ps1` starts from an empty output folder and checks that every bundled package matches `requirements.lock.txt`. Before, a second local build kept the packages of the first one; the setup program built by GitHub was not affected.
+* Uses EasyResearch 0.1.2.
 
 ## 0.1.1 – 2026-10-14
 

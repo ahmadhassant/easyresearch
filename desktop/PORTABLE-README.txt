@@ -1,4 +1,4 @@
-EasyResearch Desktop 0.1.1 — Windows x64
+EasyResearch Desktop 0.1.2 — Windows x64
 
 Double-click EasyResearchDesktop.exe. Keep the entire folder together:
 the runtime, worker, modules and DLLs are required. Python and .NET are
@@ -34,6 +34,6 @@ are available without one. Detailed package messages appear in Activity log.
 This release includes classification, regression, time-series forecasting
 and signal classification (one channel per recording).
 
-Engines: EasyClassifier 0.8.2 and EasyResearch 0.1.1 by Ahmad Hassanat (MIT).
+Engines: EasyClassifier 0.8.2 and EasyResearch 0.1.2 by Ahmad Hassanat (MIT).
 Other bundled components retain their own licenses. Python: LICENSE.txt
 in runtime/python. Package license files are in the *.dist-info folders.

@@ -38,7 +38,7 @@ This repository holds:
 
 ## Install and run
 
-**Windows, without Python:** download `EasyResearchDesktop-0.1.1-setup.exe`
+**Windows, without Python:** download `EasyResearchDesktop-0.1.2-setup.exe`
 from the [Releases page](https://github.com/ahmadhassant/easyresearch/releases)
 and run it. It installs EasyResearch Desktop with its own Python and every
 package it needs; no administrator rights are required. Windows may show

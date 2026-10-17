@@ -14,7 +14,7 @@ out, so a terminal wizard, the desktop application or a web server can drive
 them in the same way.
 """
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "Ahmad Hassanat"
 
 CITATION = (
